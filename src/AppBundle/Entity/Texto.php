@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Trascastro\UserBundle\Entity\User;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Texto
@@ -25,14 +26,14 @@ class Texto
 
     /**
      * @var string
-     *
+     *@Assert\NotBlank()
      * @ORM\Column(name="titulo", type="string", length=255)
      */
     private $titulo;
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank()
      * @ORM\Column(name="cuerpo", type="text")
      */
     private $cuerpo;

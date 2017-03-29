@@ -10,7 +10,7 @@
         <a href="{{ path('app_texto_index') }}">Volver</a> <br>
 
         {% for texto in textos %}
-           <h2>{{ texto.titulo }}</h2><br>
+           <h2>{{ texto.id }}.{{ texto.titulo }}</h2><br>
             {{ texto.cuerpo }}<br>
             {{ texto.author }} <br>
             {{ texto.createdAt | date}}<br>

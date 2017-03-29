@@ -123,15 +123,18 @@ class TextoController extends Controller
         $m = $this->getDoctrine()->getManager();
         $repository = $m->getRepository('AppBundle:Texto');
         $texto = $repository->find($id);
+        $user = $this->getUser();
+        $textoUser= $texto->getAuthor();
+        if($user->getId() === $textoUser->getId()) {
+            $form = $this->createForm(TextoType::class, $texto);
 
-        $form = $this->createForm(TextoType::class, $texto);
-
-        return $this->render(':texto:form.html.twig',
-            [
-                'form'      => $form->createView(),
-                'action'    => $this->generateUrl('app_texto_doUpdate',['id' => $id]  )
-            ]
-        );
+            return $this->render(':texto:form.html.twig',
+                [
+                    'form' => $form->createView(),
+                    'action' => $this->generateUrl('app_texto_doUpdate', ['id' => $id])
+                ]
+            );
+        }return $this->redirectToRoute('app_texto_index');
 
     }
 
@@ -145,7 +148,10 @@ class TextoController extends Controller
 
         $m          = $this->getDoctrine()->getManager();
         $repository = $m->getRepository('AppBundle:Texto');
-        $texto       = $repository->find($id);
+        $texto = $repository->find($id);
+        $user = $this->getUser();
+        $textoUser= $texto->getAuthor();
+        if($user->getId() === $textoUser->getId()) {
         $form       = $this->createForm(TextoType::class, $texto);
 
         $form->handleRequest($request);
@@ -161,6 +167,7 @@ class TextoController extends Controller
                 'action'    => $this->generateUrl('app_texto_doUpdate', ['id' => $id]),
             ]
         );
+        } return $this->redirectToRoute('app_texto_index');
 
     }
 
