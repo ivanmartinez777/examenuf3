@@ -10,15 +10,7 @@
         <a href="{{ path('app_texto_index') }}">Volver</a> <br>
 
         {% for texto in textos %}
-           <h2>{{ texto.id }}.{{ texto.titulo }}</h2><br>
-            {{ texto.cuerpo }}<br>
-            {{ texto.author }} <br>
-            {{ texto.createdAt | date}}<br>
-            {{texto.updatedAt | date("d/m/Y H:i:s")}}<br>
-            {% if (app.user == texto.author) or (app.user == "admin") %}
-                <a href="{{ path('app_texto_remove', {'id': texto.id}) }}">remove</a> <br>
-                <a href="{{ path('app_texto_update', {'id': texto.id}) }}">Editar texto</a> <br>
-            {% endif %}
+            {{ include('texto/texto.html.twig', { 'texto': texto }) }}<a href="{{ path('app_texto_individual', {'id': texto.id}) }}"><button>Seguir leyendo</button></a><br>
         {% endfor %}
 
     {% endblock %}

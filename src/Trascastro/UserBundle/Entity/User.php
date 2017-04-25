@@ -44,17 +44,18 @@ class User extends BaseUser
      */
     private $updatedAt;
 
-    /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Article", mappedBy="author")
-     */
-
-    private $articles;
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Texto", mappedBy="author")
      */
 
     private $textos;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Comentario", mappedBy="author")
+     */
+
+    private $comentarios;
     /**
      * @ORM\Column(name="numTextos", type="integer")
      */

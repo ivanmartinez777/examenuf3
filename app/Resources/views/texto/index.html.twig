@@ -5,20 +5,14 @@
     {% block body %}
         {% if is_granted('ROLE_USER') %}
           Logeado como  <a href="{{ path('app_texto_show', {'author': app.user}) }}">{{ app.user.username }}</a> <br>
+            <a href="{{ path('app_texto_create') }}"><button> Introducir nuevo texto</button></a>
         {% endif %}
         {% for texto in textos %}
-           <h2>{{ texto.id }}.{{ texto.titulo }}</h2><br>
-            {{ texto.cuerpo }}<br>
-            <a href="{{ path('app_texto_show', {'author': texto.author}) }}">{{ texto.author }}</a> <br>
-           Creado: {{ texto.createdAt | date}}<br>
-           Editado: {{texto.updatedAt | date("d/m/Y H:i:s")}}<br>
-            {% if (app.user == texto.author) or (app.user == "admin") %}
-                <a href="{{ path('app_texto_remove', {'id': texto.id}) }}">remove</a> <br>
-                <a href="{{ path('app_texto_update', {'id': texto.id}) }}">Editar texto</a> <br>
-            {% endif %}
+            {{ include('texto/texto.html.twig', { 'texto': texto }) }}
+            <a href="{{ path('app_texto_individual', {'id': texto.id}) }}"><button>Seguir leyendo</button></a><br>
+
         {% endfor %}
         <br>
-        {% if is_granted('ROLE_USER') %}
-            <a href="{{ path('app_texto_create') }}">Introducir nuevo texto</a>
-        {% endif %}
+
     {% endblock %}
+

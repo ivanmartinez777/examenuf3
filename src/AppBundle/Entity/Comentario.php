@@ -4,16 +4,17 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Trascastro\UserBundle\Entity\User;
+use AppBundle\Entity\Texto;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Texto
+ * Comentario
  *
- * @ORM\Table(name="texto")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\TextoRepository")
+ * @ORM\Table(name="comentario")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ComentarioRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Texto
+class Comentario
 {
     /**
      * @var int
@@ -26,17 +27,25 @@ class Texto
 
     /**
      * @var string
-     *@Assert\NotBlank()
-     * @ORM\Column(name="titulo", type="string", length=255)
-     */
-    private $titulo;
-
-    /**
-     * @var string
-     * @Assert\NotBlank()
+     *
      * @ORM\Column(name="cuerpo", type="text")
+     * @Assert\NotBlank()
      */
     private $cuerpo;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Trascastro\UserBundle\Entity\User", inversedBy="comentarios")
+     */
+
+    private $author;
+
+
+    /**
+     *@var int
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Texto", inversedBy="comentarios")
+     */
+
+    private $texto;
 
     /**
      * @var \DateTime
@@ -53,33 +62,6 @@ class Texto
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Trascastro\UserBundle\Entity\User", inversedBy="textos")
-     */
-
-    private $author;
-
-    /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Comentario", mappedBy="texto", cascade={"remove"} )
-     */
-
-    private $comentarios;
-
-    /**
-     * @return mixed
-     */
-    public function getAuthor()
-    {
-        return $this->author;
-    }
-
-    /**
-     * @param mixed $author
-     */
-    public function setAuthor($author)
-    {
-        $this->author = $author;
-    }
-    /**
      * Get id
      *
      * @return int
@@ -90,35 +72,11 @@ class Texto
     }
 
     /**
-     * Set titulo
-     *
-     * @param string $titulo
-     *
-     * @return Texto
-     */
-    public function setTitulo($titulo)
-    {
-        $this->titulo = $titulo;
-
-        return $this;
-    }
-
-    /**
-     * Get titulo
-     *
-     * @return string
-     */
-    public function getTitulo()
-    {
-        return $this->titulo;
-    }
-
-    /**
      * Set cuerpo
      *
      * @param string $cuerpo
      *
-     * @return Texto
+     * @return Comentario
      */
     public function setCuerpo($cuerpo)
     {
@@ -138,11 +96,39 @@ class Texto
     }
 
     /**
+     * @return mixed
+     */
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
+    /**
+     * @param mixed $author
+     */
+    public function setAuthor($author)
+    {
+        $this->author = $author;
+    }
+
+    public function setTexto($texto)
+    {
+        $this->texto = $texto;
+    }
+
+    public function getTexto()
+    {
+        return $this->texto;
+    }
+
+
+
+    /**
      * Set createdAt
      *
      * @param \DateTime $createdAt
      *
-     * @return Texto
+     * @return Comentario
      */
     public function setCreatedAt($createdAt)
     {
@@ -168,7 +154,7 @@ class Texto
      *
      * @ORM\PreUpdate()
      *
-     * @return Texto
+     * @return Comentario
      */
     public function setUpdatedAt()
     {

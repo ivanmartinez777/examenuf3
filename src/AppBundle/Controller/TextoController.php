@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use AppBundle\Form\TextoType;
+use AppBundle\Entity\Comentario;
 
 
 
@@ -31,6 +32,26 @@ class TextoController extends Controller
         ]
         );
     }
+
+    /**
+     * @Route("/soloTexto/{id}", name="app_texto_individual")
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function individualAction($id)
+    {
+        $m = $this->getDoctrine()->getManager();
+        $repo = $m->getRepository('AppBundle:Texto');
+
+        $texto = $repo->find($id);
+        return $this->render(':texto:textoInd.html.twig',
+            [
+                'texto' => $texto,
+            ]
+        );
+    }
+
+
+
     /**
      * @Route("/show_{author}", name="app_texto_show")
      * @return \Symfony\Component\HttpFoundation\Response
@@ -152,21 +173,20 @@ class TextoController extends Controller
         $user = $this->getUser();
         $textoUser= $texto->getAuthor();
         if($user->getId() === $textoUser->getId()) {
-        $form       = $this->createForm(TextoType::class, $texto);
-
-        $form->handleRequest($request);
-        if ($form->isValid()) {
-            $m->flush();
-            $this->addFlash('messages', 'texto actualizado');
-            return $this->redirectToRoute('app_texto_index');
-        }
-        $this->addFlash('messages', 'Review your form');
-        return $this->render(':texto:form.html.twig',
-            [
-                'form'      => $form->createView(),
-                'action'    => $this->generateUrl('app_texto_doUpdate', ['id' => $id]),
-            ]
-        );
+            $form       = $this->createForm(TextoType::class, $texto);
+            $form->handleRequest($request);
+            if ($form->isValid()) {
+                $m->flush();
+                $this->addFlash('messages', 'texto actualizado');
+                return $this->redirectToRoute('app_texto_index');
+            }
+            $this->addFlash('messages', 'Review your form');
+            return $this->render(':texto:form.html.twig',
+                [
+                    'form'      => $form->createView(),
+                    'action'    => $this->generateUrl('app_texto_doUpdate', ['id' => $id]),
+                ]
+            );
         } return $this->redirectToRoute('app_texto_index');
 
     }
@@ -182,10 +202,8 @@ class TextoController extends Controller
     {
         $m = $this->getDoctrine()->getManager();
         $repository = $m->getRepository('AppBundle:Texto');
-
-
-        $product = $repository->find($id);
-        $m->remove($product);
+        $texto = $repository->find($id);
+        $m->remove($texto);
         $m->flush();
 
         return $this->redirectToRoute('app_texto_index');

@@ -9,3 +9,8 @@ app.texto:
     resource: "@AppBundle/Controller/TextoController.php"
     type:     annotation
     prefix: /textos
+
+app.comentario:
+    resource: "@AppBundle/Controller/ComentarioController.php"
+    type:     annotation
+    prefix: /textos
